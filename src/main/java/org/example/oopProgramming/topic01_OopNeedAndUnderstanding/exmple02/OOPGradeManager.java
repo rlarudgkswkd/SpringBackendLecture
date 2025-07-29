@@ -1,4 +1,4 @@
-package org.example.oopProgramming.exmple02;
+package org.example.oopProgramming.topic01_OopNeedAndUnderstanding.exmple02;
 
 class Student {
     String name;

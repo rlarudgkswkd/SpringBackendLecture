@@ -1,4 +1,4 @@
-package org.example.oopProgramming.exmple01;
+package org.example.oopProgramming.topic01_OopNeedAndUnderstanding.exmple01;
 
 public class ProceduralGradeManager {
     public static void main(String[] args) {
