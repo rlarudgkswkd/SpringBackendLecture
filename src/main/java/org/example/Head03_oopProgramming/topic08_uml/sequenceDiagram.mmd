@@ -1,0 +1,16 @@
+classDiagram
+    class Payment {
+        +pay(amount)
+    }
+
+    class CreditCardPayment {
+        +pay(amount)
+    }
+
+    class Order {
+        -payment
+        +processOrder()
+    }
+
+    Payment <|-- CreditCardPayment
+    Order --> Payment
