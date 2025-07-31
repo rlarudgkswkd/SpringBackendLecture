@@ -1,4 +1,4 @@
-package org.example.Head04_Collections.topic01_JCF_understanding.example02;
+package org.example.Head04_Collections.topic02_JCFCoreInterface.example01;
 
 import java.util.ArrayList;
 import java.util.List;
