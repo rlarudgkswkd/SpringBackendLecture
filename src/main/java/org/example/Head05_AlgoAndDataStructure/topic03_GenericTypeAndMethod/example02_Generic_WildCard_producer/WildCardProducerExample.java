@@ -3,7 +3,7 @@ package org.example.Head05_AlgoAndDataStructure.topic03_GenericTypeAndMethod.exa
 import java.util.ArrayList;
 import java.util.List;
 
-public class WildCardExample {
+public class WildCardProducerExample {
     // List<? extends Shape>의 예시: List<Circle>, List<Rectangle>
     public static void printAllShapes(List<? extends Shape> shapes) {
         for (Shape s : shapes) {
