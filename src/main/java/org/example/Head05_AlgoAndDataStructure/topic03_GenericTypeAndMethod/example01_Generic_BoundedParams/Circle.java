@@ -1,4 +1,4 @@
-package org.example.Head05_AlgoAndDataStructure.topic03_GenericTypeAndMethod.example01;
+package org.example.Head05_AlgoAndDataStructure.topic03_GenericTypeAndMethod.example01_Generic_BoundedParams;
 
 // 도형 구현 클래스
 public class Circle implements Shape {
