@@ -1,1 +1,2 @@
 Hello File I/O
+Using BufferedWriter for better performance
