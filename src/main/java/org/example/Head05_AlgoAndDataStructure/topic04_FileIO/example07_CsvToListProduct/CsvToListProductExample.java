@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CsvToListProductExample {
 
-    public static class Product {
+    private static class Product {
         private int id;
         private String name;
         private int price;
