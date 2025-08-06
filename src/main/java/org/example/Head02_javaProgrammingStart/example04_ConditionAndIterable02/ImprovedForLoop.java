@@ -1,4 +1,4 @@
-package org.example.Head02_javaProgrammingStart.example03_ConditionAndIterable;
+package org.example.Head02_javaProgrammingStart.example04_ConditionAndIterable02;
 
 public class ImprovedForLoop {
     public static void main(String[] args) {
