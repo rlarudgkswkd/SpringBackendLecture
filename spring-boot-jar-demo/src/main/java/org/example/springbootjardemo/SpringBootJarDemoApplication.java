@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SpringBootJarDemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringBootJarDemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootJarDemoApplication.class, args);
+    }
 
-	@GetMapping("/")
-	public String hello() {
-		return "Hello, Executable JAR!";
-	}
+    @GetMapping("/")
+    public String hello() {
+        return "Hello, Executable JAR!";
+    }
+
 }

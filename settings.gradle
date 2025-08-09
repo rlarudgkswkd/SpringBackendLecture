@@ -1,1 +1,3 @@
 rootProject.name = 'SpringBackendLecture'
+include 'spring-boot-jar-demo'
+include 'spring-boot-jar-demo'

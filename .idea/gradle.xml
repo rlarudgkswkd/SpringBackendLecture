@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/spring-boot-jar-demo" />
           </set>
         </option>
       </GradleProjectSettings>
