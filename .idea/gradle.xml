@@ -13,6 +13,14 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringBootProjectStructureExample" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringBootProjectStructureExample" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
