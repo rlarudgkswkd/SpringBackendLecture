@@ -1,4 +1,4 @@
-package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example02;
+package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example03;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,10 +13,10 @@ public class Application {
          * 3. Bean 등록 및 의존성 주입
          */
         AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext("org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example02");
+                new AnnotationConfigApplicationContext("org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example03");
 
         // Bean 이름으로 조회
-        BookService bookService = context.getBean("bookServiceSetter", BookService.class);
+        BookService bookService = context.getBean("bookServiceField", BookService.class);
 
         /* 전체 도서 목록 조회 후 출력 확인 */
         System.out.println("=== 전체 도서 목록 ===");

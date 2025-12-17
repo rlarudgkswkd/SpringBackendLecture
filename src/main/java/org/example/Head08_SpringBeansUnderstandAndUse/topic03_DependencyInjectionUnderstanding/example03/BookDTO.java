@@ -1,4 +1,4 @@
-package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example02;
+package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example03;
 
 public class BookDTO {
 

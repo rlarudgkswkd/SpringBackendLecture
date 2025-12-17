@@ -1,4 +1,4 @@
-package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example01;
+package org.example.Head08_SpringBeansUnderstandAndUse.topic03_DependencyInjectionUnderstanding.example02;
 
 import org.springframework.stereotype.Repository;
 

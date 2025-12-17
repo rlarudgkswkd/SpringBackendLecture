@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active:
+      - dev        # 데모용으로 dev, prod 같이 써도 되지만 보통은 하나만
+      - prod
+    group:
+      dev:
+        - debug
+        - logging
+
+  main:
+    allow-bean-definition-overriding: true
+    # 커스텀 정적 리소스 위치 설정
+#  web:
+#    resources:
+#      static-locations: classpath:/custom-static/
+
+# @Conditional 실습용
+custom:
+  feature-enabled: true   # 👉 true/false 바꾸면서 Bean 등록 여부 비교해보기
+
+logging:
+  level:
+    root: INFO
