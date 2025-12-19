@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 등록 결과</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      width: 400px;
+    }
+    .item {
+      margin-bottom: 10px;
+    }
+    .label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>회원 등록 결과</h1>
+
+<div class="result-box">
+  <div class="item">
+    <span class="label">이메일:</span>
+    <span th:text="${email}">email</span>
+  </div>
+  <div class="item">
+    <span class="label">이름:</span>
+    <span th:text="${name}">name</span>
+  </div>
+  <div class="item">
+    <span class="label">전화번호:</span>
+    <span th:text="${phone}">phone</span>
+  </div>
+</div>
+
+</body>
+</html>

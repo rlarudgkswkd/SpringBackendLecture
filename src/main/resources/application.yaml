@@ -1,24 +1,66 @@
 spring:
   profiles:
+    # 현재 활성화할 프로필
     active:
       - dev        # 데모용으로 dev, prod 같이 써도 되지만 보통은 하나만
       - prod
+
+    # 프로필 그룹 설정
+    # dev 프로필이 활성화되면 debug, logging 프로필도 함께 활성화
     group:
       dev:
         - debug
         - logging
 
   main:
+    # 동일한 Bean 이름이 있을 경우 덮어쓰기 허용
+    # 다중 프로필, @Primary, @Conditional 실습 시 필요
     allow-bean-definition-overriding: true
-    # 커스텀 정적 리소스 위치 설정
-#  web:
-#    resources:
-#      static-locations: classpath:/custom-static/
 
-# @Conditional 실습용
+  # =========================
+  # Thymeleaf View 설정
+  # (기본값과 동일하지만 학습/명시 목적)
+  # =========================
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+  # =========================
+  # 커스텀 정적 리소스 위치 설정
+  # (현재는 주석 처리된 상태 유지)
+  # =========================
+  #  web:
+  #    resources:
+  #      static-locations: classpath:/custom-static/
+
+  # =========================
+  # Multipart 파일 업로드 설정
+  # =========================
+  servlet:
+    multipart:
+      max-file-size: 5MB        # 단일 파일 최대 크기
+      max-request-size: 10MB    # 전체 요청 최대 크기
+
+# =========================
+# 애플리케이션 커스텀 설정
+# =========================
+app:
+  name: OppaWords
+  version: 1.0.3
+  description: Korean learning service for Vietnamese learners.
+
+  max-users: 500        # 최대 사용자 수 (int)
+  enable-cache: true    # 캐시 사용 여부 (boolean)
+
+# =========================
+# @Conditional 실습용 설정
+# =========================
 custom:
-  feature-enabled: true   # 👉 true/false 바꾸면서 Bean 등록 여부 비교해보기
+  feature-enabled: true   # true/false 변경하면서 Bean 등록 여부 비교
 
-logging:
-  level:
-    root: INFO
+# =========================
+# 로깅 설정
+# =========================
+#logging:
+#  level:
+#    root: INFO

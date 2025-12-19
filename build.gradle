@@ -27,6 +27,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'                                     // 메모리 DB(선택)
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 test {
