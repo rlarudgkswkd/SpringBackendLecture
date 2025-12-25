@@ -1,0 +1,21 @@
+= API Documentation
+:toc: left
+:toclevels: 2
+:sectnums:
+:snippets: build/generated-snippets
+
+== Members API
+
+=== 회원 단건 조회
+
+==== Request
+include::{snippets}/member-get/http-request.adoc[]
+
+==== Path Parameters
+include::{snippets}/member-get/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/member-get/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/member-get/response-fields.adoc[]

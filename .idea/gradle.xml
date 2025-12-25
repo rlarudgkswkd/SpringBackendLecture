@@ -21,6 +21,14 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringDataJpaExample" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringDataJpaExample" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>

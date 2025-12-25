@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+</head>
+<body>
+<h1>홈</h1>
+
+<p>테스트 링크</p>
+<ul>
+  <li><a href="/members/1">/members/1 (정상)</a></li>
+  <li><a href="/members/0">/members/0 (IllegalArgumentException → 400)</a></li>
+  <li><a href="/members/100">/members/100 (MemberNotFoundException → 404)</a></li>
+</ul>
+
+<hr/>
+
+<div>
+  <h2>현재 멤버 정보(정상 케이스에서만 표시)</h2>
+  <p>memberId: <span th:text="${memberId}">-</span></p>
+  <p>name: <span th:text="${name}">-</span></p>
+</div>
+</body>
+</html>
