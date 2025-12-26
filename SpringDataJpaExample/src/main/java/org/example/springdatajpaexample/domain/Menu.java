@@ -1,10 +1,13 @@
 package org.example.springdatajpaexample.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.time.Instant;
 
 @Entity
 @Table(name = "menus")
+@Getter
 public class Menu {
 
     @Id
@@ -20,15 +23,21 @@ public class Menu {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected Menu() { } // JPA 기본 생성자
+    @ManyToOne(fetch = FetchType.LAZY) // 실무 권장
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    public Menu(String name, int price) {
+    protected Menu() { }
+
+    public Menu(String name, int price, Category category) {
         this.name = name;
         this.price = price;
         this.createdAt = Instant.now();
+        this.category = category;
     }
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public int getPrice() { return price; }
+    // 연관관계 편의 메서드(선택)
+    public void changeCategory(Category category) {
+        this.category = category;
+    }
 }
