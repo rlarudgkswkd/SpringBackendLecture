@@ -1,6 +1,7 @@
 package org.example.springdatajpaexample.controller;
 
 import org.example.springdatajpaexample.domain.Menu;
+import org.example.springdatajpaexample.dto.MenuResponse;
 import org.example.springdatajpaexample.service.MenuService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,33 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public Menu get(@PathVariable Long id) {
+    public MenuResponse get(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @GetMapping
-    public List<Menu> search(@RequestParam String keyword) {
+    public List<MenuResponse> search(@RequestParam String keyword) {
         return service.search(keyword);
     }
-}
 
+    @GetMapping("/by-category/{categoryId}")
+    public List<MenuResponse> byCategory(@PathVariable Long categoryId) {
+        return service.findByCategory(categoryId);
+    }
+
+    @GetMapping("/filter")
+    public List<MenuResponse> filter(
+            @RequestParam String categoryName,
+            @RequestParam int minPrice
+    ) {
+        return service.findExpensiveMenusInCategory(categoryName, minPrice);
+    }
+
+    @GetMapping("/filter2")
+    public List<MenuResponse> filter2(
+            @RequestParam String categoryName,
+            @RequestParam int minPrice
+    ) {
+        return service.findExpensiveMenusInCategory2(categoryName, minPrice);
+    }
+}
