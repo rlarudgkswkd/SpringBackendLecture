@@ -31,6 +31,13 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<MenuResponse> search(String keyword) {
+        return repository.findByNameContainingWithCategory(keyword).stream()
+                .map(m -> new MenuResponse(m.getId(), m.getName(), m.getPrice(), m.getCategory().getName()))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MenuResponse> searchEntityGraph(String keyword) {
         return repository.findByNameContaining(keyword).stream()
                 .map(m -> new MenuResponse(m.getId(), m.getName(), m.getPrice(), m.getCategory().getName()))
                 .toList();
@@ -101,5 +108,22 @@ public class MenuService {
         // ✅ 여기만 "findSliceBy..."로 바꿔야 메서드 충돌이 안 남(이전 대화 내용 반영)
         return repository.findSliceByCategoryNameAndPriceGreaterThanEqual(categoryName, minPrice, pageable)
                 .map(m -> new MenuResponse(m.getId(), m.getName(), m.getPrice(), m.getCategory().getName()));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MenuResponse> searchMenus(
+            Integer minPrice,
+            String categoryName,
+            Pageable pageable
+    ) {
+        return repository
+//                .findByMinPriceAndOptionalCategory(minPrice, categoryName, pageable)
+                .findByMinPriceAndOptionalCategoryWithCategory(minPrice, categoryName, pageable)
+                .map(m -> new MenuResponse(
+                        m.getId(),
+                        m.getName(),
+                        m.getPrice(),
+                        m.getCategory().getName() // ⚠️ LAZY → N+1 (다음 챕터에서 해결)
+                ));
     }
 }

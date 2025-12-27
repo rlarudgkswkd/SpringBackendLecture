@@ -4,6 +4,7 @@ import org.example.springdatajpaexample.domain.Menu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
+    @EntityGraph(attributePaths = {"category"})
     List<Menu> findByNameContaining(String keyword);
 
     List<Menu> findByPriceBetween(int min, int max);
@@ -51,4 +53,44 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             Pageable pageable
     );
 
+    @Query("""
+        SELECT m
+        FROM Menu m
+        WHERE m.price >= :minPrice
+          AND (:categoryName IS NULL OR m.category.name = :categoryName)
+    """)
+    Page<Menu> findByMinPriceAndOptionalCategory(
+            @Param("minPrice") int minPrice,
+            @Param("categoryName") String categoryName,
+            Pageable pageable
+    );
+
+    @Query("""
+        SELECT m
+        FROM Menu m
+        JOIN FETCH m.category
+        WHERE m.name LIKE %:keyword%
+    """)
+    List<Menu> findByNameContainingWithCategory(@Param("keyword") String keyword);
+
+    @Query(
+            value = """
+        SELECT m
+        FROM Menu m
+        JOIN FETCH m.category
+        WHERE m.price >= :minPrice
+          AND (:categoryName IS NULL OR m.category.name = :categoryName)
+    """,
+            countQuery = """
+        SELECT COUNT(m)
+        FROM Menu m
+        WHERE m.price >= :minPrice
+          AND (:categoryName IS NULL OR m.category.name = :categoryName)
+    """
+    )
+    Page<Menu> findByMinPriceAndOptionalCategoryWithCategory(
+            @Param("minPrice") int minPrice,
+            @Param("categoryName") String categoryName,
+            Pageable pageable
+    );
 }

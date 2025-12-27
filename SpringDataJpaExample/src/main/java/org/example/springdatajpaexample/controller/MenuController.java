@@ -29,6 +29,11 @@ public class MenuController {
         return service.search(keyword);
     }
 
+    @GetMapping("/entity-graph")
+    public List<MenuResponse> searchEntityGraph(@RequestParam String keyword) {
+        return service.searchEntityGraph(keyword);
+    }
+
     @GetMapping("/by-category/{categoryId}")
     public List<MenuResponse> byCategory(@PathVariable Long categoryId) {
         return service.findByCategory(categoryId);
@@ -81,5 +86,15 @@ public class MenuController {
             @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return service.findMenusSliceByCategoryAndMinPrice(categoryName, minPrice, pageable);
+    }
+
+    @GetMapping("/page-search")
+    public Page<MenuResponse> pageSearch(
+            @RequestParam int minPrice,
+            @RequestParam(required = false) String categoryName,
+            @PageableDefault(size = 10, sort = "price", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return service.searchMenus(minPrice, categoryName, pageable);
     }
 }
