@@ -1,6 +1,9 @@
 package org.example.springdatajpaexample.repository;
 
 import org.example.springdatajpaexample.domain.Menu;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,6 +35,20 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     List<Menu> findByCategoryNameAndPriceGreaterThanEqualOrderByPriceDesc(
             String categoryName,
             int minPrice
+    );
+
+    // [추가] Page 기반: 카테고리명 + 최소가격(2조건) + Pageable(정렬 포함)
+    Page<Menu> findByCategoryNameAndPriceGreaterThanEqual(
+            String categoryName,
+            int minPrice,
+            Pageable pageable
+    );
+
+    // Slice 기반 (메서드명만 변경)
+    Slice<Menu> findSliceByCategoryNameAndPriceGreaterThanEqual(
+            String categoryName,
+            int minPrice,
+            Pageable pageable
     );
 
 }
