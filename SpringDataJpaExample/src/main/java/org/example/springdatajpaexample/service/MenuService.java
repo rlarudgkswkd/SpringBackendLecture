@@ -1,5 +1,6 @@
 package org.example.springdatajpaexample.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springdatajpaexample.domain.Category;
@@ -9,6 +10,7 @@ import org.example.springdatajpaexample.repository.CategoryRepository;
 import org.example.springdatajpaexample.repository.MenuRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -25,6 +27,7 @@ public class MenuService {
     private final MenuRepository repository;
     private final CategoryRepository categoryRepository;
     private final AuditService auditService; // 추가
+    private final EntityManager em;
 
     @Transactional(readOnly = true)
     public MenuResponse findById(Long id) {
@@ -185,5 +188,19 @@ public class MenuService {
 
         // 3) 일부러 실패시켜 바깥 트랜잭션 롤백 유도
         throw new RuntimeException("OUTER FAIL");
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public int readTwicePrice(Long menuId) throws Exception {
+        int first = repository.findById(menuId).orElseThrow().getPrice();
+        Thread.sleep(5000); // 5초 동안 다른 요청으로 가격 변경(커밋)하도록 시간 벌기
+        em.clear(); // ⭐ 1차 캐시 제거 -> 다음 조회는 DB로 감
+        int second = repository.findById(menuId).orElseThrow().getPrice();
+        return second - first; // 0이면 동일, 값이 다르면 non-repeatable read 상황 체감
+    }
+
+    @Transactional
+    public void updatePrice(Long menuId, int price) {
+        repository.updatePrice(menuId, price);
     }
 }

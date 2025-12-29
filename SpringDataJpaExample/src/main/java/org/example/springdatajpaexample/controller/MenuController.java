@@ -128,4 +128,17 @@ public class MenuController {
         service.changePriceWithAuditAndFail(menuId, newPrice);
         return "ok";
     }
+
+    @GetMapping("/tx/isolation/read-twice")
+    public String readTwice(@RequestParam Long menuId) throws Exception {
+        int diff = service.readTwicePrice(menuId);
+        return "diff=" + diff;
+    }
+
+    @PostMapping("/tx/isolation/update")
+    public String updatePrice(@RequestParam Long menuId, @RequestParam int price) {
+        // 단순 업데이트: 기본 @Transactional 없어도 save/update는 커밋됨(요청 단위)
+        service.updatePrice(menuId, price); // 아래 updatePrice 메서드 하나 만들어두면 됨
+        return "updated";
+    }
 }
