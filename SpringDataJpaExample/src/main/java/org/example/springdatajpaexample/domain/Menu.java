@@ -45,4 +45,8 @@ public class Menu {
     public void increasePrice(int delta) {
         this.price += delta;
     }
+
+    public void changePrice(int price) {
+        this.price = price;
+    }
 }
