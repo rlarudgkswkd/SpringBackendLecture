@@ -119,4 +119,13 @@ public class MenuController {
     ) {
         service.txCreateAndIncreaseWithRollback(categoryName, newMenuName, newMenuPrice, delta);
     }
+
+    @PostMapping("/tx/propagation")
+    public String propagationTest(
+            @RequestParam Long menuId,
+            @RequestParam int newPrice
+    ) {
+        service.changePriceWithAuditAndFail(menuId, newPrice);
+        return "ok";
+    }
 }

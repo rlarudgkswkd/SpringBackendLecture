@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -95,4 +96,8 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     );
 
     List<Menu> findByCategoryName(String categoryName);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update Menu m set m.price = :price where m.id = :id")
+    int updatePrice(@Param("id") Long id, @Param("price") int price);
 }

@@ -1,6 +1,7 @@
 package org.example.springdatajpaexample.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.springdatajpaexample.domain.Category;
 import org.example.springdatajpaexample.domain.Menu;
 import org.example.springdatajpaexample.dto.MenuResponse;
@@ -9,15 +10,21 @@ import org.example.springdatajpaexample.repository.MenuRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
+import static jakarta.transaction.Status.STATUS_COMMITTED;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MenuService {
 
     private final MenuRepository repository;
     private final CategoryRepository categoryRepository;
+    private final AuditService auditService; // 추가
 
     @Transactional(readOnly = true)
     public MenuResponse findById(Long id) {
@@ -158,5 +165,25 @@ public class MenuService {
 
         // 3) 강제 예외 → 롤백 확인
         throw new RuntimeException("강제 예외(롤백 확인)");
+    }
+
+    @Transactional
+    public void changePriceWithAuditAndFail(Long menuId, int newPrice) {
+        log.info("[Outer] tx active={}", TransactionSynchronizationManager.isActualTransactionActive());
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override public void afterCompletion(int status) {
+                log.info("[Outer] END = {}", status == STATUS_COMMITTED ? "COMMIT" : "ROLLBACK");
+            }
+        });
+
+        // 1) 바깥 트랜잭션에서 가격 변경
+        repository.updatePrice(menuId, newPrice);
+
+        // 2) 감사 기록(항상 새 트랜잭션)
+        auditService.writeAuditMenu(1L);
+
+        // 3) 일부러 실패시켜 바깥 트랜잭션 롤백 유도
+        throw new RuntimeException("OUTER FAIL");
     }
 }
