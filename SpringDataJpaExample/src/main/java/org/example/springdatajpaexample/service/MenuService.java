@@ -1,8 +1,10 @@
 package org.example.springdatajpaexample.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.springdatajpaexample.domain.Category;
 import org.example.springdatajpaexample.domain.Menu;
 import org.example.springdatajpaexample.dto.MenuResponse;
+import org.example.springdatajpaexample.repository.CategoryRepository;
 import org.example.springdatajpaexample.repository.MenuRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 public class MenuService {
 
     private final MenuRepository repository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public MenuResponse findById(Long id) {
@@ -125,5 +128,35 @@ public class MenuService {
                         m.getPrice(),
                         m.getCategory().getName() // ⚠️ LAZY → N+1 (다음 챕터에서 해결)
                 ));
+    }
+
+    // 실습 A: 성공하면 커밋
+    @Transactional
+    public void txIncrease(String categoryName, int delta) {
+        List<Menu> menus = repository.findByCategoryName(categoryName);
+        menus.forEach(m -> m.increasePrice(delta));
+        // save 호출 없어도 dirty checking으로 UPDATE 됨
+    }
+
+    // 실습 B: 중간에 예외 → 전체 롤백(신규 메뉴 insert + 가격 update 전부)
+    @Transactional
+    public void txCreateAndIncreaseWithRollback(
+            String categoryName,
+            String newMenuName,
+            int newMenuPrice,
+            int delta
+    ) {
+        Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new IllegalArgumentException("카테고리 없음"));
+
+        // 1) 신규 메뉴 insert
+        repository.save(new Menu(newMenuName, newMenuPrice, category));
+
+        // 2) 가격 일괄 인상(update)
+        List<Menu> menus = repository.findByCategoryName(categoryName);
+        menus.forEach(m -> m.increasePrice(delta));
+
+        // 3) 강제 예외 → 롤백 확인
+        throw new RuntimeException("강제 예외(롤백 확인)");
     }
 }

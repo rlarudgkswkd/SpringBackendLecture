@@ -97,4 +97,26 @@ public class MenuController {
     ) {
         return service.searchMenus(minPrice, categoryName, pageable);
     }
+
+    // 1) 커밋 확인
+    // POST /menus/tx/increase?categoryName=찌개류&delta=1000
+    @PostMapping("/tx/increase")
+    public void txIncrease(
+            @RequestParam String categoryName,
+            @RequestParam int delta
+    ) {
+        service.txIncrease(categoryName, delta);
+    }
+
+    // 2) 롤백 확인
+    // POST /menus/tx/rollback?categoryName=찌개류&newMenuName=롤백메뉴&newMenuPrice=9999&delta=1000
+    @PostMapping("/tx/rollback")
+    public void txRollback(
+            @RequestParam String categoryName,
+            @RequestParam String newMenuName,
+            @RequestParam int newMenuPrice,
+            @RequestParam int delta
+    ) {
+        service.txCreateAndIncreaseWithRollback(categoryName, newMenuName, newMenuPrice, delta);
+    }
 }
