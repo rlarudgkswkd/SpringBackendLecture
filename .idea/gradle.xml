@@ -14,6 +14,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Head16_SpringStableHigh" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Head16_SpringStableHigh" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/SpringBootProjectStructureExample" />
         <option name="modules">
           <set>
