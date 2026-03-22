@@ -28,3 +28,8 @@ spring:
     username: menu_user
     password: menu_pass
     driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    root: INFO
+    com.example.head16_springstablehigh: DEBUG
