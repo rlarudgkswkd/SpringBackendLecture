@@ -1,5 +1,6 @@
-package com.example.springtdd.Head06_ControllerTest.dto;
+package com.example.springtdd.Head06_ControllerTest.dto.admin;
 
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

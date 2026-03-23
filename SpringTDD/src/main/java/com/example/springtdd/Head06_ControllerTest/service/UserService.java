@@ -1,6 +1,8 @@
 package com.example.springtdd.Head06_ControllerTest.service;
 
-import com.example.springtdd.Head06_ControllerTest.dto.*;
+import com.example.springtdd.Head06_ControllerTest.dto.user.CreateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UpdateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

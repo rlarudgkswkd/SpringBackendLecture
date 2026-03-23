@@ -1,4 +1,4 @@
-package com.example.springtdd.Head06_ControllerTest.dto;
+package com.example.springtdd.Head06_ControllerTest.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

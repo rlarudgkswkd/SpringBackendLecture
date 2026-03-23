@@ -1,6 +1,10 @@
 package com.example.springtdd.Head06_ControllerTest.example01;
 
-import com.example.springtdd.Head06_ControllerTest.dto.*;
+import com.example.springtdd.Head06_ControllerTest.config.SecurityConfig;
+import com.example.springtdd.Head06_ControllerTest.controller.UserController;
+import com.example.springtdd.Head06_ControllerTest.dto.user.CreateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UpdateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserResponse;
 import com.example.springtdd.Head06_ControllerTest.exception.DuplicateEmailException;
 import com.example.springtdd.Head06_ControllerTest.exception.UserNotFoundException;
 import com.example.springtdd.Head06_ControllerTest.service.UserService;
@@ -12,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,8 +36,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.containsString;
 
-
-@WebMvcTest
+@WebMvcTest(UserController.class)
+@Import(SecurityConfig.class)
 class UserControllerTest {
 
     @Autowired private MockMvc mockMvc;

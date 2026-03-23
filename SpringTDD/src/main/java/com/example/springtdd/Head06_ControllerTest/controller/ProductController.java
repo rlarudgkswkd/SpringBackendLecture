@@ -1,9 +1,9 @@
 package com.example.springtdd.Head06_ControllerTest.controller;
 
 
-import com.example.springtdd.Head06_ControllerTest.dto.CreateProductRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.product.CreateProductRequest;
 import com.example.springtdd.Head06_ControllerTest.dto.PageResponse;
-import com.example.springtdd.Head06_ControllerTest.dto.ProductResponse;
+import com.example.springtdd.Head06_ControllerTest.dto.product.ProductResponse;
 import com.example.springtdd.Head06_ControllerTest.service.ProductService;
 import lombok.RequiredArgsConstructor;
 

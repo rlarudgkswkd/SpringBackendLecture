@@ -1,9 +1,8 @@
 package com.example.springtdd.Head06_ControllerTest.example04;
 
 import com.example.springtdd.Head06_ControllerTest.controller.AdminController;
-import com.example.springtdd.Head06_ControllerTest.dto.AdminUserResponse;
-import com.example.springtdd.Head06_ControllerTest.dto.UpdateUserRequest;
-import com.example.springtdd.Head06_ControllerTest.dto.UserRole;
+import com.example.springtdd.Head06_ControllerTest.dto.admin.AdminUserResponse;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserRole;
 import com.example.springtdd.Head06_ControllerTest.service.AdminService;
 
 import com.example.springtdd.Head06_ControllerTest.service.UserService;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,10 +39,9 @@ import com.example.springtdd.Head06_ControllerTest.config.SecurityConfig;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 // JSON Content-Type
-import org.springframework.http.MediaType;
 
 // CSRF 처리
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 
 @WebMvcTest(AdminController.class)
 @Import(SecurityConfig.class)

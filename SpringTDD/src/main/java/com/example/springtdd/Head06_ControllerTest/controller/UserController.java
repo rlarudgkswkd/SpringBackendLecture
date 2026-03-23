@@ -1,6 +1,8 @@
 package com.example.springtdd.Head06_ControllerTest.controller;
 
-import com.example.springtdd.Head06_ControllerTest.dto.*;
+import com.example.springtdd.Head06_ControllerTest.dto.user.CreateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UpdateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserResponse;
 import com.example.springtdd.Head06_ControllerTest.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

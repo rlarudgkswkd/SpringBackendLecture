@@ -2,9 +2,9 @@ package com.example.springtdd.Head06_ControllerTest.example03;
 
 import com.example.springtdd.Head06_ControllerTest.config.TestConfig;
 import com.example.springtdd.Head06_ControllerTest.controller.ProductController;
-import com.example.springtdd.Head06_ControllerTest.dto.CreateProductRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.product.CreateProductRequest;
 import com.example.springtdd.Head06_ControllerTest.dto.PageResponse;
-import com.example.springtdd.Head06_ControllerTest.dto.ProductResponse;
+import com.example.springtdd.Head06_ControllerTest.dto.product.ProductResponse;
 import com.example.springtdd.Head06_ControllerTest.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;

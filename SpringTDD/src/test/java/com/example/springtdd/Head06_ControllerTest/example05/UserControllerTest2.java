@@ -1,8 +1,8 @@
 package com.example.springtdd.Head06_ControllerTest.example05;
 
 import com.example.springtdd.Head06_ControllerTest.controller.UserController;
-import com.example.springtdd.Head06_ControllerTest.dto.UpdateUserRequest;
-import com.example.springtdd.Head06_ControllerTest.dto.UserResponse;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UpdateUserRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.user.UserResponse;
 import com.example.springtdd.Head06_ControllerTest.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

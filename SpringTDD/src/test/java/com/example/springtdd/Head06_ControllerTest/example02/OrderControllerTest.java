@@ -1,7 +1,7 @@
 package com.example.springtdd.Head06_ControllerTest.example02;
 
 import com.example.springtdd.Head06_ControllerTest.controller.OrderController;
-import com.example.springtdd.Head06_ControllerTest.dto.CreateOrderRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.order.CreateOrderRequest;
 import com.example.springtdd.Head06_ControllerTest.exception.InsufficientInventoryException;
 import com.example.springtdd.Head06_ControllerTest.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
 package com.example.springtdd.Head06_ControllerTest.controller;
 
-import com.example.springtdd.Head06_ControllerTest.dto.CreateOrderRequest;
+import com.example.springtdd.Head06_ControllerTest.dto.order.CreateOrderRequest;
 import com.example.springtdd.Head06_ControllerTest.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
