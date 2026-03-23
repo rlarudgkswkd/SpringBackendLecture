@@ -1,6 +1,8 @@
-package com.example.springtdd.Head05_SpringServiceLayerTest.example02;
+package com.example.springtdd.Head05_SpringServiceLayerTest.example01;
 
+import com.example.springtdd.Head04_MockitoBasic.service.AuditService;
 import com.example.springtdd.Head04_MockitoBasic.service.EmailService;
+import com.example.springtdd.Head04_MockitoBasic.service.PasswordEncoder;
 import com.example.springtdd.Head05_SpringServiceLayerTest.entity.Account;
 import com.example.springtdd.Head05_SpringServiceLayerTest.entity.AccountStatus;
 import com.example.springtdd.Head05_SpringServiceLayerTest.entity.TransactionHistory;
@@ -28,7 +30,10 @@ class TransactionBehaviorTest {
     @Autowired private AccountService accountService;
     @Autowired private AccountRepository accountRepository;
     @Autowired private TransactionHistoryRepository historyRepository;
+
     @MockBean private EmailService emailService;
+    @MockBean private AuditService auditService;
+    @MockBean private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("계좌 이체 중 오류 발생시 모든 변경사항이 롤백되어야 한다")
@@ -55,6 +60,7 @@ class TransactionBehaviorTest {
     }
 
     @Test
+    //테스트 실패됨. 실패 후 롤백이 되었는지를 확인해야함
     @DisplayName("중첩 트랜잭션 실패시 전체 롤백")
     void nestedTransactionTest() {
 

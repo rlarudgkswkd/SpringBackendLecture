@@ -15,4 +15,6 @@ public interface EmailService {
     String getLastMessage();
 
     void sendBatch(List<String> messages);
+
+    boolean sendWelcomeEmail(String mail, String 홍길동);
 }
