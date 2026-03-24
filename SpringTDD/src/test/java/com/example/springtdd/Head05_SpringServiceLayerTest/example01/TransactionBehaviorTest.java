@@ -1,5 +1,6 @@
 package com.example.springtdd.Head05_SpringServiceLayerTest.example01;
 
+import com.example.springtdd.Head04_MockitoBasic.repository.UserNewRepository;
 import com.example.springtdd.Head04_MockitoBasic.service.AuditService;
 import com.example.springtdd.Head04_MockitoBasic.service.EmailService;
 import com.example.springtdd.Head04_MockitoBasic.service.PasswordEncoder;
@@ -14,12 +15,16 @@ import com.example.springtdd.Head06_ControllerTest.service.AdminService;
 import com.example.springtdd.Head06_ControllerTest.service.OrderService;
 import com.example.springtdd.Head06_ControllerTest.service.ProductService;
 import com.example.springtdd.Head06_ControllerTest.service.UserService;
+import com.example.springtdd.Head07_IntegrationTest.external.ExternalApiClient;
+import com.example.springtdd.Head07_IntegrationTest.service.InventoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -42,6 +47,9 @@ class TransactionBehaviorTest {
     @MockBean private OrderService orderService;
     @MockBean private ProductService productService;
     @MockBean private UserService userService;
+    @MockBean private UserNewRepository userNewRepository;
+    @MockBean private InventoryService inventoryService;
+    @MockBean private ExternalApiClient externalApiClient;
 
     @Test
     @DisplayName("계좌 이체 중 오류 발생시 모든 변경사항이 롤백되어야 한다")
