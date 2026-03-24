@@ -10,6 +10,10 @@ import com.example.springtdd.Head05_SpringServiceLayerTest.exception.InactiveAcc
 import com.example.springtdd.Head05_SpringServiceLayerTest.repository.AccountRepository;
 import com.example.springtdd.Head05_SpringServiceLayerTest.repository.TransactionHistoryRepository;
 import com.example.springtdd.Head05_SpringServiceLayerTest.service.AccountService;
+import com.example.springtdd.Head06_ControllerTest.service.AdminService;
+import com.example.springtdd.Head06_ControllerTest.service.OrderService;
+import com.example.springtdd.Head06_ControllerTest.service.ProductService;
+import com.example.springtdd.Head06_ControllerTest.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +38,10 @@ class TransactionBehaviorTest {
     @MockBean private EmailService emailService;
     @MockBean private AuditService auditService;
     @MockBean private PasswordEncoder passwordEncoder;
+    @MockBean private AdminService adminService;
+    @MockBean private OrderService orderService;
+    @MockBean private ProductService productService;
+    @MockBean private UserService userService;
 
     @Test
     @DisplayName("계좌 이체 중 오류 발생시 모든 변경사항이 롤백되어야 한다")
