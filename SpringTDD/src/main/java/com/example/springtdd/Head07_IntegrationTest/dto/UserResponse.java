@@ -12,6 +12,9 @@ public class UserResponse {
         this.name = name;
     }
 
+    public UserResponse(Long id) {
+    }
+
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getName() { return name; }
