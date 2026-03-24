@@ -1,4 +1,4 @@
-package com.example.springtdd.Head05_SpringServiceLayerTest.example02;
+package com.example.springtdd.Head05_SpringServiceLayerTest.example01;
 
 import com.example.springtdd.Head04_MockitoBasic.entity.UserNew;
 import com.example.springtdd.Head04_MockitoBasic.repository.UserNewRepository;
