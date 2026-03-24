@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         "spring.datasource.url=jdbc:postgresql://localhost:5432/menudb",
         "spring.datasource.username=menu_user",
         "spring.datasource.password=menu_pass",
+        "spring.datasource.driver-class-name=org.postgresql.Driver", // ⭐ 추가
         "spring.jpa.hibernate.ddl-auto=none"
 })
 class UserRepositoryIntegrityTest {
