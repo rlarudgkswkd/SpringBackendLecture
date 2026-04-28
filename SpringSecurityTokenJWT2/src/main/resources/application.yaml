@@ -1,0 +1,67 @@
+# Spring Boot 애플리케이션 설정
+spring:
+  # 데이터베이스 연결 설정
+  datasource:
+    url: jdbc:postgresql://localhost:5432/menudb
+    username: menu_user
+    password: menu_pass
+    driver-class-name: org.postgresql.Driver
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      # DDL 자동 생성 정책 (none: 비활성화, create: 매번 재생성, update: 변경사항만 반영)
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # SQL 초기화 설정
+  sql:
+    init:
+      # SQL 초기화 실행 모드 (always: 항상 실행, never: 실행 안함)
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      encoding: UTF-8
+
+  # 파일 업로드 설정
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# 서버 설정
+server:
+  port: 8080
+  servlet:
+    session:
+      # 원래 Spring Security의 서버 세션 유지 기간은 디폴트로 30분이다.
+      timeout: 30m
+
+# 로깅 설정
+logging:
+  level:
+    # Spring Security 관련 디버그 로그 활성화
+    org.springframework.security: DEBUG
+    # Spring Web 관련 디버그 로그 활성화
+    org.springframework.web: DEBUG
+    # 애플리케이션 패키지 디버그 로그 활성화
+    com.ohgiraffers.sessionauth: DEBUG
+
+
+# 파일 업로드 경로 설정 (build 폴더 직접 사용)
+file:
+  upload:
+    path: build/resources/main/static/images/
+
+# JWT 설정
+jwt:
+  access-token:
+    secret: change-me-access-secret-for-dev-only
+    exp: 900000        # 15분(ms)
+  refresh-token:
+    secret: change-me-refresh-secret-for-dev-only
+    exp: 3600000       # 1시간(ms)

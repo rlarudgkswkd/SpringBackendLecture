@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오지라퍼 레스토랑 - 메뉴 관리</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 메인 애플리케이션 -->
+    <div id="app">
+        <!-- 네비게이션 바 -->
+        <nav class="navbar" id="navbar" style="display: none;">
+            <div class="nav-container">
+                <div class="nav-left">
+                    <h1>🍽️ Ohgiraffers' 레스토랑</h1>
+                </div>
+                <div class="nav-right">
+                    <span id="userInfo" class="user-info"></span>
+                    <button class="btn btn-primary" id="loginBtn" onclick="openLoginModal()" style="display: none;">로그인</button>
+                    <button class="btn btn-logout" id="logoutBtn" onclick="logout()" style="display: none;">로그아웃</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 로그인 화면 -->
+        <div id="loginScreen" class="auth-screen">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>🍽️ Ohgiraffers' 레스토랑</h1>
+                    <p>메뉴 관리 시스템에 오신 것을 환영합니다</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showLogin()">로그인</button>
+                    <button class="tab-btn" onclick="showSignup()">회원가입</button>
+                </div>
+
+                <!-- 로그인 폼 (method 미지정 시 디폴트는 GET요청) -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginUsername">사용자명</label>
+                        <input type="text" id="loginUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">비밀번호</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">로그인</button>
+                </form>
+
+                <!-- 회원가입 폼 -->
+                <form id="signupForm" class="auth-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="signupUsername">사용자명</label>
+                        <input type="text" id="signupUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">이메일</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">비밀번호</label>
+                        <input type="password" id="signupPassword" name="password" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">비밀번호 확인</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">회원가입</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 메인 화면 -->
+        <div id="mainScreen" class="main-screen" style="display: none;">
+            <div class="container">
+                <div class="controls">
+                    <h2>메뉴 목록</h2>
+                    <div class="control-buttons">
+                        <button class="btn" id="addMenuBtn" onclick="openAddMenuModal()" style="display: none;">
+                            + 메뉴 등록
+                        </button>
+                        <button class="btn btn-secondary" onclick="openUserManagementModal()" id="userManagementBtn" style="display: none;">
+                            👥 사용자 관리
+                        </button>
+                    </div>
+                </div>
+
+                <div id="menuContainer">
+                    <div class="loading">메뉴를 불러오는 중...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메뉴 등록 모달 -->
+    <div id="addMenuModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddMenuModal()">&times;</span>
+            <h2 style="margin-bottom: 25px; color: #2c3e50;">새 메뉴 등록</h2>
+            <form id="addMenuForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="menuName">메뉴명 *</label>
+                    <input type="text" id="menuName" name="menuName" required>
+                </div>
+                <div class="form-group">
+                    <label for="menuPrice">가격 (원) *</label>
+                    <input type="number" id="menuPrice" name="menuPrice" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="menuDescription">설명</label>
+                    <textarea id="menuDescription" name="menuDescription" placeholder="메뉴에 대한 설명을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="categoryCode">카테고리 *</label>
+                    <select id="categoryCode" name="categoryCode" required>
+                        <option value="">카테고리를 선택하세요</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="menuStock">재고 수량 *</label>
+                    <input type="number" id="menuStock" name="menuStock" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="imageFile">메뉴 이미지</label>
+                    <input type="file" id="imageFile" name="imageFile" accept="image/*">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">
+                    메뉴 등록
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 메뉴 상세 모달 -->
+    <div id="menuDetailModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeMenuDetailModal()">&times;</span>
+            <h2 style="margin-bottom: 25px; color: #2c3e50;">메뉴 상세 정보</h2>
+            <div id="menuDetailContent">
+                <!-- 메뉴 상세 정보가 여기에 동적으로 생성됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 사용자 관리 모달 -->
+    <div id="userManagementModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close" onclick="closeUserManagementModal()">&times;</span>
+            <h2 style="margin-bottom: 25px; color: #2c3e50;">사용자 관리</h2>
+            <div id="userManagementContent">
+                <!-- 사용자 관리 내용이 여기에 동적으로 생성됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 컨테이너 -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="js/menu.js"></script>
+</body>
+</html> 
