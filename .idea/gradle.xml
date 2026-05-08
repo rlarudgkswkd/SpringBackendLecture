@@ -38,10 +38,26 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecurity" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringSecurity" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecurityTokenJWT" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/SpringSecurityTokenJWT" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecurityTokenJWT2" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringSecurityTokenJWT2" />
           </set>
         </option>
       </GradleProjectSettings>
