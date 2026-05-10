@@ -8,22 +8,20 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class JwtLoggingFilter extends OncePerRequestFilter {
+public class RequestLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
-        String authHeader =
-                request.getHeader("Authorization");
-
-        System.out.println(
-                "JwtLoggingFilter 실행 - Authorization Header: " + authHeader
-        );
+        System.out.println("===== RequestLoggingFilter 요청 =====");
+        System.out.println("URI: " + request.getRequestURI());
 
         filterChain.doFilter(request, response);
+
+        System.out.println("===== RequestLoggingFilter 응답 =====");
     }
 }
