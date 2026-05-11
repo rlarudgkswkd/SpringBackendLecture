@@ -16,14 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import org.springframework.security.web.savedrequest.SavedRequest;
-
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
 import java.time.LocalDateTime;
-
 import java.util.Map;
 
 @Slf4j
@@ -31,6 +27,7 @@ import java.util.Map;
 public class CustomAuthenticationSuccessHandler
         implements AuthenticationSuccessHandler {
 
+    // JSON 응답 생성을 위한 ObjectMapper
     private final ObjectMapper objectMapper =
             new ObjectMapper();
 
@@ -41,6 +38,7 @@ public class CustomAuthenticationSuccessHandler
             Authentication authentication
     ) throws IOException {
 
+        // 세션이 존재하지 않으면 새로 생성
         HttpSession session =
                 request.getSession();
 
@@ -50,7 +48,12 @@ public class CustomAuthenticationSuccessHandler
                 session.getId()
         );
 
-        // 세션 메타데이터 저장
+        /*
+         * 사용자 세션 메타데이터 저장
+         *
+         * HttpSession 내부에 사용자 관련 데이터를 저장할 수 있다.
+         * Spring Security의 SecurityContext와는 별개의 사용자 정의 데이터이다.
+         */
         session.setAttribute(
                 "USER_SESSION_METADATA",
 
@@ -60,6 +63,11 @@ public class CustomAuthenticationSuccessHandler
                         .build()
         );
 
+        /*
+         * 로그인 성공 응답 DTO 생성
+         *
+         * AJAX 요청일 경우 JSON 응답으로 반환된다.
+         */
         LoginSuccessInfo loginInfo =
                 LoginSuccessInfo.builder()
                         .username(authentication.getName())
@@ -67,6 +75,8 @@ public class CustomAuthenticationSuccessHandler
                         .loginTime(LocalDateTime.now())
                         .userAgent(request.getHeader("User-Agent"))
                         .ipAddress(request.getRemoteAddr())
+
+                        // 권한 목록 추출
                         .authorities(
                                 authentication.getAuthorities()
                                         .stream()
@@ -75,6 +85,7 @@ public class CustomAuthenticationSuccessHandler
                         )
                         .build();
 
+        // AJAX 요청 여부 확인
         if (isAjaxRequest(request)) {
 
             handleAjaxSuccess(
@@ -84,6 +95,7 @@ public class CustomAuthenticationSuccessHandler
 
         } else {
 
+            // 일반 브라우저 요청이면 페이지 이동
             handleWebSuccess(
                     request,
                     response
@@ -91,6 +103,12 @@ public class CustomAuthenticationSuccessHandler
         }
     }
 
+    /*
+     * AJAX 요청 여부 판단
+     *
+     * 브라우저 fetch/AJAX 요청에서는
+     * X-Requested-With 헤더를 통해 구분 가능하다.
+     */
     private boolean isAjaxRequest(
             HttpServletRequest request
     ) {
@@ -100,6 +118,11 @@ public class CustomAuthenticationSuccessHandler
         );
     }
 
+    /*
+     * AJAX 로그인 성공 응답 처리
+     *
+     * JSON 형태로 응답 반환
+     */
     private void handleAjaxSuccess(
             HttpServletResponse response,
             LoginSuccessInfo loginInfo
@@ -127,6 +150,11 @@ public class CustomAuthenticationSuccessHandler
         );
     }
 
+    /*
+     * 일반 웹 로그인 성공 처리
+     *
+     * 브라우저 페이지 이동 수행
+     */
     private void handleWebSuccess(
             HttpServletRequest request,
             HttpServletResponse response
