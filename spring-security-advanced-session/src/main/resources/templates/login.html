@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login</title>
+</head>
+<body>
+
+<h1>Login</h1>
+<form th:action="@{/login}" method="post">
+
+  <div>
+    <input
+            type="text"
+            name="username"
+            placeholder="username"
+    >
+  </div>
+  <br>
+  <div>
+    <input
+            type="password"
+            name="password"
+            placeholder="password"
+    >
+  </div>
+  <br>
+
+  <!-- Remember-Me 체크박스 -->
+  <div>
+    <label>
+      <input
+              type="checkbox"
+              name="remember-me"
+      >
+      Remember Me
+    </label>
+  </div>
+  <br>
+  <button type="submit">
+    로그인
+  </button>
+
+</form>
+
+</body>
+</html>

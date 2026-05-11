@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Home</title>
+</head>
+<body>
+
+<h1>HOME</h1>
+
+<h3 th:text="${username}"></h3>
+
+<form th:action="@{/logout}" method="post">
+  <button type="submit">
+    로그아웃
+  </button>
+</form>
+
+</body>
+</html>
