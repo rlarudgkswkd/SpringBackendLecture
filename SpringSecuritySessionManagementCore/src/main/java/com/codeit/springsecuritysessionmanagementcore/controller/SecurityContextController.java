@@ -99,4 +99,35 @@ public class SecurityContextController {
 
         return attributes;
     }
+
+    @GetMapping("/api/session-info")
+    public Map<String, Object> sessionInfo(
+            HttpSession session
+    ) {
+
+        Map<String, Object> response =
+                new HashMap<>();
+
+        response.put(
+                "sessionId",
+                session.getId()
+        );
+
+        response.put(
+                "creationTime",
+                session.getCreationTime()
+        );
+
+        response.put(
+                "lastAccessedTime",
+                session.getLastAccessedTime()
+        );
+
+        response.put(
+                "maxInactiveInterval",
+                session.getMaxInactiveInterval()
+        );
+
+        return response;
+    }
 }

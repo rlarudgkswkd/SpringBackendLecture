@@ -50,6 +50,16 @@ public class SessionSecurityConfig {
                         .sessionCreationPolicy(
                                 SessionCreationPolicy.IF_REQUIRED
                         )
+
+                        /*
+                         * Session Fixation 보호 전략
+                         *
+                         * 로그인 성공 시
+                         * 기존 Session ID를 변경한다.
+                         */
+                        .sessionFixation(sessionFixation ->
+                                sessionFixation.changeSessionId()
+                        )
                 )
 
                 .formLogin(form -> form
