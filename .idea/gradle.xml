@@ -46,6 +46,22 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecuritySessionBasedArchi" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringSecuritySessionBasedArchi" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecuritySessionManagementCore" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringSecuritySessionManagementCore" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecurityTokenJWT" />
         <option name="modules">
           <set>
