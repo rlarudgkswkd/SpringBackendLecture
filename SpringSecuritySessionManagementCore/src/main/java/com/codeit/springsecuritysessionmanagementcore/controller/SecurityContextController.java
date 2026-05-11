@@ -12,6 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class SecurityContextController {
 
@@ -69,5 +73,30 @@ public class SecurityContextController {
                 )
 
                 .build();
+    }
+
+    /*
+     * HttpSession 내부 속성 조회 API
+     */
+    @GetMapping("/api/session-attributes")
+    public Map<String, Object> sessionAttributes(
+            HttpSession session
+    ) {
+
+        Map<String, Object> attributes = new HashMap<>();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+
+        while (attributeNames.hasMoreElements()) {
+
+            String attributeName = attributeNames.nextElement();
+            Object attributeValue = session.getAttribute(attributeName);
+
+            attributes.put(
+                    attributeName,
+                    attributeValue.getClass().getName()
+            );
+        }
+
+        return attributes;
     }
 }
