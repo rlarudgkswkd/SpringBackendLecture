@@ -31,9 +31,28 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+
+                        /*
+                         * 로그인 페이지 허용
+                         */
                         .requestMatchers("/login")
                         .permitAll()
 
+                        /*
+                         * USER 권한 필요
+                         */
+                        .requestMatchers("/user/**")
+                        .hasRole("USER")
+
+                        /*
+                         * ADMIN 권한 필요
+                         */
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+
+                        /*
+                         * 나머지 요청은 인증 필요
+                         */
                         .anyRequest()
                         .authenticated()
                 )
@@ -107,7 +126,19 @@ public class SecurityConfig {
                         .roles("USER")
                         .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin =
+                User.builder()
+                        .username("admin")
+                        .password(
+                                passwordEncoder.encode("1234")
+                        )
+                        .roles("ADMIN")
+                        .build();
+
+        return new InMemoryUserDetailsManager(
+                user,
+                admin
+        );
     }
 
     @Bean
