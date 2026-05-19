@@ -1,6 +1,7 @@
 package com.codeit.springsecurityjwtdemo.config;
 
 import com.codeit.springsecurityjwtdemo.security.JwtAuthenticationFilter;
+import com.codeit.springsecurityjwtdemo.security.JwtLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,16 +28,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter
-            jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final JwtLoginSuccessHandler jwtLoginSuccessHandler;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http
-    ) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session -> session
@@ -52,11 +54,35 @@ public class SecurityConfig {
                         .authenticated()
                 )
 
+                .formLogin(form -> form
+
+                        .loginProcessingUrl(
+                                "/api/auth/login"
+                        )
+
+                        .successHandler(
+                                jwtLoginSuccessHandler
+                        )
+                )
+
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager
+    userDetailsService() {
+
+        UserDetails user = User.builder()
+                .username("user")
+                .password("{noop}1234")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user);
     }
 }
