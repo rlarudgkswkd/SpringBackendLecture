@@ -2,6 +2,7 @@ package com.codeit.springsecurityjwtdemo.config;
 
 import com.codeit.springsecurityjwtdemo.security.JwtAuthenticationFilter;
 import com.codeit.springsecurityjwtdemo.security.JwtLoginSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
@@ -54,6 +55,7 @@ public class SecurityConfig {
                         .authenticated()
                 )
 
+
                 .formLogin(form -> form
 
                         .loginProcessingUrl(
@@ -64,6 +66,28 @@ public class SecurityConfig {
                                 jwtLoginSuccessHandler
                         )
                 )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("""
+                    {
+                      "error": "UNAUTHORIZED",
+                      "message": "인증이 필요합니다."
+                    }
+                    """);
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("""
+                    {
+                      "error": "FORBIDDEN",
+                      "message": "접근 권한이 없습니다."
+                    }
+                    """);
+                        })
+                )
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
@@ -71,18 +95,5 @@ public class SecurityConfig {
                 );
 
         return http.build();
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager
-    userDetailsService() {
-
-        UserDetails user = User.builder()
-                .username("user")
-                .password("{noop}1234")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
     }
 }

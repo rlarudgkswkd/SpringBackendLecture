@@ -6,6 +6,7 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -19,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+
 import java.time.Instant;
 
 import java.util.Base64;
@@ -31,6 +34,8 @@ import java.util.UUID;
 public class JwtTokenProvider {
 
     private final MACSigner signer;
+
+    private final MACVerifier verifier;
 
     private final long accessTokenValiditySeconds;
 
@@ -47,6 +52,9 @@ public class JwtTokenProvider {
 
         this.signer =
                 new MACSigner(secretKey);
+
+        this.verifier =
+                new MACVerifier(secretKey);
 
         this.accessTokenValiditySeconds =
                 accessTokenValiditySeconds;
@@ -120,6 +128,55 @@ public class JwtTokenProvider {
 
             throw new RuntimeException(
                     "JWT 생성 실패",
+                    e
+            );
+        }
+    }
+
+    public boolean validateToken(
+            String token
+    ) {
+
+        try {
+
+            SignedJWT signedJWT =
+                    SignedJWT.parse(token);
+
+            if (!signedJWT.verify(verifier)) {
+
+                return false;
+            }
+
+            Date expirationTime =
+                    signedJWT.getJWTClaimsSet()
+                            .getExpirationTime();
+
+            return expirationTime.after(
+                    new Date()
+            );
+
+        } catch (Exception e) {
+
+            return false;
+        }
+    }
+
+    public String getUsername(
+            String token
+    ) {
+
+        try {
+
+            SignedJWT signedJWT =
+                    SignedJWT.parse(token);
+
+            return signedJWT
+                    .getJWTClaimsSet()
+                    .getSubject();
+
+        } catch (ParseException e) {
+
+            throw new RuntimeException(
                     e
             );
         }
