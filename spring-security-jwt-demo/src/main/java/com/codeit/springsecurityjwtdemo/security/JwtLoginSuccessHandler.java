@@ -35,6 +35,8 @@ public class JwtLoginSuccessHandler
     private final ObjectMapper
             objectMapper;
 
+    private final RefreshTokenStore refreshTokenStore;
+
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -50,6 +52,27 @@ public class JwtLoginSuccessHandler
                 jwtTokenProvider.generateAccessToken(
                         userDetails
                 );
+
+        String refreshToken =
+                jwtTokenProvider.generateRefreshToken();
+
+        refreshTokenStore.save(
+                refreshToken,
+                userDetails.getUsername()
+        );
+
+        jakarta.servlet.http.Cookie refreshCookie =
+                new jakarta.servlet.http.Cookie(
+                        "REFRESH_TOKEN",
+                        refreshToken
+                );
+
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(false);
+        refreshCookie.setPath("/api/auth");
+        refreshCookie.setMaxAge(7 * 24 * 60 * 60);
+
+        response.addCookie(refreshCookie);
 
         LoginSuccessResponse responseBody =
                 LoginSuccessResponse.builder()

@@ -181,4 +181,13 @@ public class JwtTokenProvider {
             );
         }
     }
+
+    public String generateRefreshToken() {
+
+        return UUID.randomUUID()
+                + "-"
+                + UUID.randomUUID()
+                .toString()
+                .replace("-", "");
+    }
 }
