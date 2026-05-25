@@ -94,6 +94,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/java-thread-basic-demo" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/java-thread-basic-demo" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/spring-security-advanced-session" />
         <option name="modules">
           <set>
