@@ -1,6 +1,6 @@
 package com.codeit.javathreadbasicdemo.practice05;
 
-public class ThreadBasicDemoApplication {
+public class ThreadBasicDemoApplication5 {
 
     public static void main(String[] args) {
 
