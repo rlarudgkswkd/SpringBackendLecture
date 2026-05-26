@@ -14,42 +14,23 @@ public class AsyncController {
 
     private final AsyncService asyncService;
 
-    @GetMapping("/api/async/void")
-    public Map<String, Object> asyncVoid() {
+    @GetMapping("/api/async/error")
+    public Map<String, Object> asyncError() {
 
         System.out.println(
-                now() + " [AsyncController] void 요청"
+                now() + " [AsyncController] 요청 수신"
         );
 
-        try {
-
-            asyncService.asyncVoidException();
-
-        } catch (Exception e) {
-
-            System.out.println(
-                    now() + " [AsyncController] try-catch 예외 처리"
-            );
-        }
-
-        return Map.of(
-                "success", true,
-                "message", "void 비동기 요청 완료"
+        asyncService.asyncException(
+                "test@test.com"
         );
-    }
-
-    @GetMapping("/api/async/completable")
-    public Map<String, Object> completable() {
 
         System.out.println(
-                now() + " [AsyncController] completable 요청"
+                now() + " [AsyncController] 응답 반환"
         );
 
-        asyncService.asyncCompletableException();
-
         return Map.of(
-                "success", true,
-                "message", "CompletableFuture 요청 완료"
+                "success", true
         );
     }
 
