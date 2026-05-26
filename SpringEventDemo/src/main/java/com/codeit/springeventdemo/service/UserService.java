@@ -16,35 +16,27 @@ public class UserService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public void registerSuccessUser(String email) {
+    public void registerUser(String email) {
 
-        String userId = UUID.randomUUID().toString();
+        String userId =
+                UUID.randomUUID().toString();
 
-        System.out.println(now() + " [UserService] 회원가입 시작");
-        System.out.println(now() + " [UserService] 실행 스레드: "
-                + Thread.currentThread().getName());
+        System.out.println(
+                now() + " [UserService] 회원가입 시작"
+        );
+
+        System.out.println(
+                now() + " [UserService] 실행 스레드: "
+                        + Thread.currentThread().getName()
+        );
 
         eventPublisher.publishEvent(
                 new UserRegisteredEvent(userId, email)
         );
 
-        System.out.println(now() + " [UserService] 회원가입 성공");
-    }
-
-    @Transactional
-    public void registerFailUser(String email) {
-
-        String userId = UUID.randomUUID().toString();
-
-        System.out.println(now() + " [UserService] 회원가입 시작");
-        System.out.println(now() + " [UserService] 실행 스레드: "
-                + Thread.currentThread().getName());
-
-        eventPublisher.publishEvent(
-                new UserRegisteredEvent(userId, email)
+        System.out.println(
+                now() + " [UserService] 회원가입 완료"
         );
-
-        throw new RuntimeException("회원가입 실패 발생");
     }
 
     private String now() {

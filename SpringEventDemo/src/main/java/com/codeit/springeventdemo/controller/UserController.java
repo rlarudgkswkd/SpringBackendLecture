@@ -14,35 +14,20 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/api/users/success")
-    public Map<String, Object> success() {
+    @GetMapping("/api/users/register")
+    public Map<String, Object> register() {
 
         System.out.println(
-                now() + " [UserController] 성공 요청"
+                now() + " [UserController] 회원가입 요청"
         );
 
-        userService.registerSuccessUser(
-                "success@test.com"
+        userService.registerUser(
+                "event@test.com"
         );
 
         return Map.of(
-                "success", true
-        );
-    }
-
-    @GetMapping("/api/users/fail")
-    public Map<String, Object> fail() {
-
-        System.out.println(
-                now() + " [UserController] 실패 요청"
-        );
-
-        userService.registerFailUser(
-                "fail@test.com"
-        );
-
-        return Map.of(
-                "success", false
+                "success", true,
+                "message", "회원가입 완료"
         );
     }
 
