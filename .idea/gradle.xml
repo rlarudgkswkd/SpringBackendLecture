@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/java-completablefuture-demo" />
             <option value="$PROJECT_DIR$/java-executor-future-demo" />
             <option value="$PROJECT_DIR$/spring-boot-jar-demo" />
           </set>
@@ -19,6 +20,14 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/Head16_SpringStableHigh" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringAsyncDemo" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringAsyncDemo" />
           </set>
         </option>
       </GradleProjectSettings>
