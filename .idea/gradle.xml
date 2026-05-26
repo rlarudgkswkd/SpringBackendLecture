@@ -32,6 +32,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringAsyncExceptionDemo" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringAsyncExceptionDemo" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/SpringBootProjectStructureExample" />
         <option name="modules">
           <set>
