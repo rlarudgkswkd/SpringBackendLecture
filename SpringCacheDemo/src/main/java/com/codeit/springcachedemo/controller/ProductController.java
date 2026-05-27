@@ -16,16 +16,33 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/api/products")
-    public Map<String, Object> getProduct(
-            @RequestParam Long id
-    ) {
+    public Map<String, Object> getProduct(@RequestParam Long id) {
 
         printLog("상품 조회 요청");
 
         long start = System.currentTimeMillis();
 
-        String result =
-                productService.getProduct(id);
+        String result = productService.getProduct(id);
+
+        long end = System.currentTimeMillis();
+
+        return Map.of(
+                "result", result,
+                "duration(ms)", end - start
+        );
+    }
+
+    @GetMapping("/api/products/update")
+    public Map<String, Object> updateProduct(
+            @RequestParam Long id,
+            @RequestParam String name
+    ) {
+
+        printLog("상품 수정 요청");
+
+        long start = System.currentTimeMillis();
+
+        String result = productService.updateProduct(id, name);
 
         long end = System.currentTimeMillis();
 
@@ -36,16 +53,13 @@ public class ProductController {
     }
 
     @GetMapping("/api/products/custom")
-    public Map<String, Object> getCustomProduct(
-            @RequestParam Long id
-    ) {
+    public Map<String, Object> getCustomProduct(@RequestParam Long id) {
 
         printLog("커스텀 키 조회 요청");
 
         long start = System.currentTimeMillis();
 
-        String result =
-                productService.getProductWithCustomKey(id);
+        String result = productService.getProductWithCustomKey(id);
 
         long end = System.currentTimeMillis();
 
@@ -65,11 +79,7 @@ public class ProductController {
 
         long start = System.currentTimeMillis();
 
-        String result =
-                productService.getProductWithCategory(
-                        category,
-                        id
-                );
+        String result = productService.getProductWithCategory(category, id);
 
         long end = System.currentTimeMillis();
 
@@ -84,27 +94,19 @@ public class ProductController {
 
         productService.printCacheNames();
 
-        return Map.of(
-                "success", true
-        );
+        return Map.of("success", true);
     }
 
     @GetMapping("/api/cache/products")
-    public Map<String, Object> cacheProduct(
-            @RequestParam Long id
-    ) {
+    public Map<String, Object> cacheProduct(@RequestParam Long id) {
 
         productService.printProductCache(id);
 
-        return Map.of(
-                "success", true
-        );
+        return Map.of("success", true);
     }
 
     @GetMapping("/api/cache/products/evict")
-    public Map<String, Object> evictProduct(
-            @RequestParam Long id
-    ) {
+    public Map<String, Object> evictProduct(@RequestParam Long id) {
 
         productService.evictProduct(id);
 
@@ -119,9 +121,7 @@ public class ProductController {
 
         productService.evictAllProducts();
 
-        return Map.of(
-                "success", true
-        );
+        return Map.of("success", true);
     }
 
     private void printLog(String message) {

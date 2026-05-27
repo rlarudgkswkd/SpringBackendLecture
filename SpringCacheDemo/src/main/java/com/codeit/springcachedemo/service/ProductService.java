@@ -3,6 +3,7 @@ package com.codeit.springcachedemo.service;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class ProductService {
     public String getProduct(Long id) {
 
         printLog("상품 조회 시작");
-        printLog("실행 메서드: getProduct()");
+        printLog("@Cacheable 캐시 미스 → 실제 메서드 실행");
         printLog("파라미터 id: " + id);
 
         sleep(3000);
@@ -29,6 +30,25 @@ public class ProductService {
         printLog("DB 조회 완료");
 
         return "상품-" + id;
+    }
+
+    @CachePut(
+            value = "products",
+            key = "#id"
+    )
+    public String updateProduct(Long id, String name) {
+
+        printLog("상품 수정 시작");
+        printLog("@CachePut은 캐시 존재 여부와 관계없이 항상 실행");
+        printLog("수정 id: " + id);
+        printLog("수정 name: " + name);
+
+        sleep(2000);
+
+        printLog("DB 수정 완료");
+        printLog("products 캐시 갱신 완료");
+
+        return name;
     }
 
     @Cacheable(
@@ -49,10 +69,7 @@ public class ProductService {
             value = "productsByMultiParam",
             key = "#category + '_' + #id"
     )
-    public String getProductWithCategory(
-            String category,
-            Long id
-    ) {
+    public String getProductWithCategory(String category, Long id) {
 
         printLog("다중 파라미터 상품 조회");
         printLog("category: " + category);
@@ -70,9 +87,7 @@ public class ProductService {
 
         cacheManager.getCacheNames()
                 .forEach(cacheName ->
-                        System.out.println(
-                                "cacheName: " + cacheName
-                        )
+                        System.out.println("cacheName: " + cacheName)
                 );
 
         System.out.println("====================================");
@@ -87,33 +102,17 @@ public class ProductService {
         System.out.println("========== products 캐시 조회 ==========");
 
         if (cache == null) {
-
-            System.out.println(
-                    "products 캐시가 존재하지 않습니다."
-            );
-
+            System.out.println("products 캐시가 존재하지 않습니다.");
             return;
         }
 
-        Cache.ValueWrapper valueWrapper =
-                cache.get(id);
+        Cache.ValueWrapper valueWrapper = cache.get(id);
 
         if (valueWrapper == null) {
-
-            System.out.println(
-                    "key = " + id
-                            + " 에 대한 캐시가 없습니다."
-            );
-
+            System.out.println("key = " + id + " 에 대한 캐시가 없습니다.");
         } else {
-
-            System.out.println(
-                    "key = " + id
-            );
-
-            System.out.println(
-                    "value = " + valueWrapper.get()
-            );
+            System.out.println("key = " + id);
+            System.out.println("value = " + valueWrapper.get());
         }
 
         System.out.println("======================================");
@@ -126,7 +125,7 @@ public class ProductService {
     )
     public void evictProduct(Long id) {
 
-        printLog("캐시 삭제");
+        printLog("특정 상품 캐시 삭제");
         printLog("삭제 key = " + id);
     }
 
@@ -136,17 +135,14 @@ public class ProductService {
     )
     public void evictAllProducts() {
 
-        printLog("전체 캐시 삭제");
+        printLog("products 캐시 전체 삭제");
     }
 
     private void sleep(long millis) {
 
         try {
-
             Thread.sleep(millis);
-
         } catch (InterruptedException e) {
-
             Thread.currentThread().interrupt();
         }
     }
