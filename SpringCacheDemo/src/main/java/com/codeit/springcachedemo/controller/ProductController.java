@@ -16,13 +16,14 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/api/products")
-    public Map<String, Object> getProduct(@RequestParam Long id) {
-
-        printLog("상품 조회 요청");
+    public Map<String, Object> getProduct(
+            @RequestParam Long id
+    ) {
 
         long start = System.currentTimeMillis();
 
-        String result = productService.getProduct(id);
+        String result =
+                productService.getProduct(id);
 
         long end = System.currentTimeMillis();
 
@@ -38,90 +39,37 @@ public class ProductController {
             @RequestParam String name
     ) {
 
-        printLog("상품 수정 요청");
-
-        long start = System.currentTimeMillis();
-
-        String result = productService.updateProduct(id, name);
-
-        long end = System.currentTimeMillis();
+        String result =
+                productService.updateProduct(
+                        id,
+                        name
+                );
 
         return Map.of(
-                "result", result,
-                "duration(ms)", end - start
+                "result", result
         );
     }
 
-    @GetMapping("/api/products/custom")
-    public Map<String, Object> getCustomProduct(@RequestParam Long id) {
-
-        printLog("커스텀 키 조회 요청");
-
-        long start = System.currentTimeMillis();
-
-        String result = productService.getProductWithCustomKey(id);
-
-        long end = System.currentTimeMillis();
-
-        return Map.of(
-                "result", result,
-                "duration(ms)", end - start
-        );
-    }
-
-    @GetMapping("/api/products/category")
-    public Map<String, Object> getCategoryProduct(
-            @RequestParam String category,
+    @GetMapping("/api/cache/evict")
+    public Map<String, Object> evictProduct(
             @RequestParam Long id
     ) {
-
-        printLog("다중 파라미터 조회 요청");
-
-        long start = System.currentTimeMillis();
-
-        String result = productService.getProductWithCategory(category, id);
-
-        long end = System.currentTimeMillis();
-
-        return Map.of(
-                "result", result,
-                "duration(ms)", end - start
-        );
-    }
-
-    @GetMapping("/api/cache/names")
-    public Map<String, Object> cacheNames() {
-
-        productService.printCacheNames();
-
-        return Map.of("success", true);
-    }
-
-    @GetMapping("/api/cache/products")
-    public Map<String, Object> cacheProduct(@RequestParam Long id) {
-
-        productService.printProductCache(id);
-
-        return Map.of("success", true);
-    }
-
-    @GetMapping("/api/cache/products/evict")
-    public Map<String, Object> evictProduct(@RequestParam Long id) {
 
         productService.evictProduct(id);
 
         return Map.of(
-                "success", true,
                 "deletedKey", id
         );
     }
 
-    @GetMapping("/api/cache/products/evict-all")
+    @GetMapping("/api/cache/evict-all")
     public Map<String, Object> evictAllProducts() {
 
         productService.evictAllProducts();
 
-        return Map.of("success", true);
+        return Map.of(
+                "success", true
+        );
     }
 
     private void printLog(String message) {
@@ -130,6 +78,64 @@ public class ProductController {
                 "[" + LocalTime.now().withNano(0)
                         + "] [ProductController] "
                         + message
+        );
+    }
+
+    @GetMapping("/api/products/method")
+    public Map<String, Object> getMethodProduct(
+            @RequestParam Long id
+    ) {
+
+        return Map.of(
+                "result",
+                productService.getProductByMethod(id)
+        );
+    }
+
+    @GetMapping("/api/products/class")
+    public Map<String, Object> getClassProduct(
+            @RequestParam Long id
+    ) {
+
+        return Map.of(
+                "result",
+                productService.getProductByClass(id)
+        );
+    }
+
+    @GetMapping("/api/products/generator")
+    public Map<String, Object> getGeneratorProduct(
+            @RequestParam Long id
+    ) {
+
+        return Map.of(
+                "result",
+                productService.getProductByGenerator(id)
+        );
+    }
+
+    @GetMapping("/api/products/complex-update")
+    public Map<String, Object> updateComplexCache(
+            @RequestParam Long id,
+            @RequestParam String name
+    ) {
+
+        return Map.of(
+                "result",
+                productService.updateComplexCache(
+                        id,
+                        name
+                )
+        );
+    }
+
+    @GetMapping("/api/cache/names")
+    public Map<String, Object> cacheNames() {
+
+        productService.printCacheNames();
+
+        return Map.of(
+                "success", true
         );
     }
 }

@@ -2,14 +2,14 @@ package com.codeit.springcachedemo.service;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 
 @Service
+@CacheConfig(cacheNames = "products")
 public class ProductService {
 
     private final CacheManager cacheManager;
@@ -18,131 +18,69 @@ public class ProductService {
         this.cacheManager = cacheManager;
     }
 
-    @Cacheable("products")
+    @Cacheable(
+            key = "#id",
+            condition = "#id > 0",
+            unless = "#result.contains('미판매')"
+    )
     public String getProduct(Long id) {
 
         printLog("상품 조회 시작");
-        printLog("@Cacheable 캐시 미스 → 실제 메서드 실행");
-        printLog("파라미터 id: " + id);
+        printLog("id = " + id);
 
         sleep(3000);
+
+        if (id == 999L) {
+
+            return "미판매상품";
+        }
 
         printLog("DB 조회 완료");
 
         return "상품-" + id;
     }
 
-    @CachePut(
-            value = "products",
-            key = "#id"
-    )
-    public String updateProduct(Long id, String name) {
+    @CachePut(key = "#id")
+    public String updateProduct(
+            Long id,
+            String name
+    ) {
 
-        printLog("상품 수정 시작");
-        printLog("@CachePut은 캐시 존재 여부와 관계없이 항상 실행");
-        printLog("수정 id: " + id);
-        printLog("수정 name: " + name);
+        printLog("상품 수정");
+        printLog("캐시 강제 갱신");
 
         sleep(2000);
-
-        printLog("DB 수정 완료");
-        printLog("products 캐시 갱신 완료");
 
         return name;
     }
 
-    @Cacheable(
-            value = "productsByCustomKey",
-            key = "#id"
-    )
-    public String getProductWithCustomKey(Long id) {
-
-        printLog("커스텀 키 상품 조회");
-        printLog("key = #id");
-
-        sleep(3000);
-
-        return "커스텀상품-" + id;
-    }
-
-    @Cacheable(
-            value = "productsByMultiParam",
-            key = "#category + '_' + #id"
-    )
-    public String getProductWithCategory(String category, Long id) {
-
-        printLog("다중 파라미터 상품 조회");
-        printLog("category: " + category);
-        printLog("id: " + id);
-
-        sleep(3000);
-
-        return category + "-상품-" + id;
-    }
-
-    public void printCacheNames() {
-
-        System.out.println();
-        System.out.println("========== 등록된 캐시 이름 ==========");
-
-        cacheManager.getCacheNames()
-                .forEach(cacheName ->
-                        System.out.println("cacheName: " + cacheName)
-                );
-
-        System.out.println("====================================");
-        System.out.println();
-    }
-
-    public void printProductCache(Long id) {
-
-        Cache cache = cacheManager.getCache("products");
-
-        System.out.println();
-        System.out.println("========== products 캐시 조회 ==========");
-
-        if (cache == null) {
-            System.out.println("products 캐시가 존재하지 않습니다.");
-            return;
-        }
-
-        Cache.ValueWrapper valueWrapper = cache.get(id);
-
-        if (valueWrapper == null) {
-            System.out.println("key = " + id + " 에 대한 캐시가 없습니다.");
-        } else {
-            System.out.println("key = " + id);
-            System.out.println("value = " + valueWrapper.get());
-        }
-
-        System.out.println("======================================");
-        System.out.println();
-    }
-
     @CacheEvict(
-            value = "products",
             key = "#id"
     )
     public void evictProduct(Long id) {
 
-        printLog("특정 상품 캐시 삭제");
+        printLog("특정 캐시 삭제");
         printLog("삭제 key = " + id);
     }
 
     @CacheEvict(
-            value = "products",
-            allEntries = true
+            allEntries = true,
+            beforeInvocation = true
     )
     public void evictAllProducts() {
 
-        printLog("products 캐시 전체 삭제");
+        printLog("전체 캐시 삭제");
+        printLog("beforeInvocation = true");
     }
 
     private void sleep(long millis) {
 
         try {
+
             Thread.sleep(millis);
+
         } catch (InterruptedException e) {
+
             Thread.currentThread().interrupt();
         }
     }
@@ -154,5 +92,97 @@ public class ProductService {
                         + "] [ProductService] "
                         + message
         );
+    }
+
+    @Cacheable(
+            value = "productsByMethod",
+            key = "#root.methodName + '_' + #id"
+    )
+    public String getProductByMethod(Long id) {
+
+        printLog("메서드명 기반 캐시 키");
+
+        sleep(2000);
+
+        return "method-product-" + id;
+    }
+
+    @Cacheable(
+            value = "productsByClass",
+            key = "#root.targetClass.simpleName + '_' + #id"
+    )
+    public String getProductByClass(Long id) {
+
+        printLog("클래스명 기반 캐시 키");
+
+        sleep(2000);
+
+        return "class-product-" + id;
+    }
+
+    @Cacheable(
+            value = "productsByCustomGenerator",
+            keyGenerator = "customKeyGenerator"
+    )
+    public String getProductByGenerator(Long id) {
+
+        printLog("커스텀 KeyGenerator");
+
+        sleep(2000);
+
+        return "generator-product-" + id;
+    }
+
+    @Caching(
+            put = {
+                    @CachePut(value = "products", key = "#id"),
+                    @CachePut(value = "productNames", key = "#id")
+            },
+            evict = {
+                    @CacheEvict(value = "searchResults", allEntries = true),
+                    @CacheEvict(value = "popularProducts", allEntries = true)
+            }
+    )
+    public String updateComplexCache(
+            Long id,
+            String name
+    ) {
+
+        printLog("@Caching 복합 작업");
+
+        sleep(2000);
+
+        return name;
+    }
+
+    public void printCacheNames() {
+
+        System.out.println();
+        System.out.println("========== 등록된 캐시 및 Key 조회 ==========");
+
+        cacheManager.getCacheNames()
+                .forEach(cacheName -> {
+
+                    System.out.println();
+                    System.out.println("cacheName: " + cacheName);
+
+                    Cache cache = cacheManager.getCache(cacheName);
+
+                    // ConcurrentMapCache 로 다운캐스팅
+                    if (cache instanceof ConcurrentMapCache concurrentMapCache) {
+
+                        System.out.println("keys:");
+
+                        concurrentMapCache
+                                .getNativeCache()
+                                .keySet()
+                                .forEach(key ->
+                                        System.out.println(" - " + key)
+                                );
+                    }
+                });
+
+        System.out.println("===========================================");
+        System.out.println();
     }
 }
