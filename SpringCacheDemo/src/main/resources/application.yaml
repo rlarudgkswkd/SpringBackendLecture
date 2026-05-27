@@ -1,3 +1,6 @@
 spring:
+  application:
+    name: SpringCacheDemo
+
   cache:
-    type: simple
+    type: caffeine
