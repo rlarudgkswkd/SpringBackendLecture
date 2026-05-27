@@ -1,28 +1,35 @@
 package com.codeit.springcachedemo.controller;
 
+import com.codeit.springcachedemo.service.CacheMonitoringService;
 import com.codeit.springcachedemo.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.stream.LongStream;
 
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
+    private final CacheMonitoringService cacheMonitoringService;
 
     @GetMapping("/api/products")
-    public Map<String, Object> getProduct(@RequestParam Long id) {
+    public Map<String, Object> getProduct(
+            @RequestParam Long id
+    ) {
 
-        long start = System.currentTimeMillis();
+        long start =
+                System.currentTimeMillis();
 
-        String result = productService.getProduct(id);
+        String result =
+                productService.getProduct(id);
 
-        long end = System.currentTimeMillis();
+        long end =
+                System.currentTimeMillis();
 
         return Map.of(
                 "result", result,
@@ -30,38 +37,22 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/api/cache/manager")
-    public Map<String, Object> cacheManager() {
+    @GetMapping("/api/cache/report")
+    public Map<String, Object> cacheReport() {
 
-        productService.printCacheManagerType();
-
-        return Map.of("success", true);
+        return cacheMonitoringService
+                .getCacheReport();
     }
 
-    @GetMapping("/api/cache/stats")
-    public Map<String, Object> cacheStats() {
+    @GetMapping("/api/cache/pollution-test")
+    public Map<String, Object> pollutionTest() {
 
-        productService.printCacheStats();
-
-        return Map.of("success", true);
-    }
-
-    @DeleteMapping("/api/cache/products")
-    public Map<String, Object> evictProduct(@RequestParam Long id) {
-
-        productService.evictProduct(id);
+        LongStream.rangeClosed(1, 20)
+                .forEach(productService::getProduct);
 
         return Map.of(
-                "success", true,
-                "evictedId", id
+                "success",
+                true
         );
-    }
-
-    @DeleteMapping("/api/cache/products/all")
-    public Map<String, Object> evictAllProducts() {
-
-        productService.evictAllProducts();
-
-        return Map.of("success", true);
     }
 }

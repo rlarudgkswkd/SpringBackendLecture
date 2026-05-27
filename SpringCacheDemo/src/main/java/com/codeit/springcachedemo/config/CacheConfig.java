@@ -24,15 +24,15 @@ public class CacheConfig {
         cacheManager.registerCustomCache(
                 "products",
                 Caffeine.newBuilder()
-                        .maximumSize(3)
-                        .expireAfterWrite(Duration.ofSeconds(10))
+                        .maximumSize(5)
+                        .expireAfterWrite(Duration.ofSeconds(30))
                         .recordStats()
                         .removalListener((Object key, Object value, RemovalCause cause) -> {
+
                             System.out.println(
                                     "[" + LocalTime.now().withNano(0)
                                             + "] [CacheRemovalListener] "
                                             + "key=" + key
-                                            + ", value=" + value
                                             + ", cause=" + cause
                             );
                         })

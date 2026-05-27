@@ -2,5 +2,15 @@ spring:
   application:
     name: SpringCacheDemo
 
-  cache:
-    type: caffeine
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,caches,info
+
+  endpoint:
+    health:
+      show-details: always
+
+    caches:
+      access: unrestricted
