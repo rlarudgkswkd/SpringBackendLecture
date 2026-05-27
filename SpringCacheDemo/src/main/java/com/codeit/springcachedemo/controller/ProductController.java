@@ -61,7 +61,7 @@ public class ProductController {
             @RequestParam Long id
     ) {
 
-        printLog("다중 키 조회 요청");
+        printLog("다중 파라미터 조회 요청");
 
         long start = System.currentTimeMillis();
 
@@ -76,6 +76,51 @@ public class ProductController {
         return Map.of(
                 "result", result,
                 "duration(ms)", end - start
+        );
+    }
+
+    @GetMapping("/api/cache/names")
+    public Map<String, Object> cacheNames() {
+
+        productService.printCacheNames();
+
+        return Map.of(
+                "success", true
+        );
+    }
+
+    @GetMapping("/api/cache/products")
+    public Map<String, Object> cacheProduct(
+            @RequestParam Long id
+    ) {
+
+        productService.printProductCache(id);
+
+        return Map.of(
+                "success", true
+        );
+    }
+
+    @GetMapping("/api/cache/products/evict")
+    public Map<String, Object> evictProduct(
+            @RequestParam Long id
+    ) {
+
+        productService.evictProduct(id);
+
+        return Map.of(
+                "success", true,
+                "deletedKey", id
+        );
+    }
+
+    @GetMapping("/api/cache/products/evict-all")
+    public Map<String, Object> evictAllProducts() {
+
+        productService.evictAllProducts();
+
+        return Map.of(
+                "success", true
         );
     }
 

@@ -1,5 +1,8 @@
 package com.codeit.springcachedemo.service;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +10,12 @@ import java.time.LocalTime;
 
 @Service
 public class ProductService {
+
+    private final CacheManager cacheManager;
+
+    public ProductService(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
 
     @Cacheable("products")
     public String getProduct(Long id) {
@@ -52,6 +61,82 @@ public class ProductService {
         sleep(3000);
 
         return category + "-상품-" + id;
+    }
+
+    public void printCacheNames() {
+
+        System.out.println();
+        System.out.println("========== 등록된 캐시 이름 ==========");
+
+        cacheManager.getCacheNames()
+                .forEach(cacheName ->
+                        System.out.println(
+                                "cacheName: " + cacheName
+                        )
+                );
+
+        System.out.println("====================================");
+        System.out.println();
+    }
+
+    public void printProductCache(Long id) {
+
+        Cache cache = cacheManager.getCache("products");
+
+        System.out.println();
+        System.out.println("========== products 캐시 조회 ==========");
+
+        if (cache == null) {
+
+            System.out.println(
+                    "products 캐시가 존재하지 않습니다."
+            );
+
+            return;
+        }
+
+        Cache.ValueWrapper valueWrapper =
+                cache.get(id);
+
+        if (valueWrapper == null) {
+
+            System.out.println(
+                    "key = " + id
+                            + " 에 대한 캐시가 없습니다."
+            );
+
+        } else {
+
+            System.out.println(
+                    "key = " + id
+            );
+
+            System.out.println(
+                    "value = " + valueWrapper.get()
+            );
+        }
+
+        System.out.println("======================================");
+        System.out.println();
+    }
+
+    @CacheEvict(
+            value = "products",
+            key = "#id"
+    )
+    public void evictProduct(Long id) {
+
+        printLog("캐시 삭제");
+        printLog("삭제 key = " + id);
+    }
+
+    @CacheEvict(
+            value = "products",
+            allEntries = true
+    )
+    public void evictAllProducts() {
+
+        printLog("전체 캐시 삭제");
     }
 
     private void sleep(long millis) {
