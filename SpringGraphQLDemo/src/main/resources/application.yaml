@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: SpringGraphQLDemo
+
+  graphql:
+    path: /graphql
+
+    graphiql:
+      enabled: true
+      path: /graphiql
+
+    schema:
+      locations: classpath:graphql/
+      file-extensions: .graphqls

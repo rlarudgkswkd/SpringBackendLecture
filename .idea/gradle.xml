@@ -72,6 +72,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringGraphQLDemo" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringGraphQLDemo" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/SpringSecurity" />
         <option name="modules">
           <set>
