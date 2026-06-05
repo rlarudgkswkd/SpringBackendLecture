@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>STOMP Text Message Demo</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 720px;
+            margin: 40px auto;
+        }
+
+        input {
+            padding: 8px;
+            margin: 4px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 4px 4px 4px 0;
+            cursor: pointer;
+        }
+
+        #messages {
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            min-height: 200px;
+        }
+
+        .message {
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>STOMP Text Message Demo</h1>
+
+<div>
+    <label>사용자 이름</label>
+    <input id="sender" type="text" placeholder="예: user1">
+
+    <button onclick="connect()">연결</button>
+    <button onclick="disconnect()">연결 해제</button>
+
+    <div id="status" class="status">연결 상태: DISCONNECTED</div>
+</div>
+
+<hr>
+
+<div>
+    <label>메시지</label>
+    <input id="content" type="text" placeholder="전송할 메시지를 입력하세요">
+
+    <button onclick="sendMessage()">메시지 전송</button>
+</div>
+
+<div id="messages"></div>
+
+<script>
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS('/ws');
+
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function () {
+            document.getElementById('status').innerText = '연결 상태: CONNECTED';
+
+            stompClient.subscribe('/topic/messages', function (message) {
+                const response = JSON.parse(message.body);
+                showMessage(response);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect(function () {
+                document.getElementById('status').innerText = '연결 상태: DISCONNECTED';
+            });
+        }
+    }
+
+    function sendMessage() {
+        if (stompClient === null) {
+            alert('먼저 WebSocket에 연결해야 합니다.');
+            return;
+        }
+
+        const sender = document.getElementById('sender').value;
+        const content = document.getElementById('content').value;
+
+        if (!sender || !content) {
+            alert('사용자 이름과 메시지를 모두 입력해야 합니다.');
+            return;
+        }
+
+        stompClient.send(
+            '/app/message',
+            {},
+            JSON.stringify({
+                sender: sender,
+                content: content
+            })
+        );
+
+        document.getElementById('content').value = '';
+    }
+
+    function showMessage(response) {
+        const messages = document.getElementById('messages');
+
+        const messageElement = document.createElement('div');
+        messageElement.className = 'message';
+        messageElement.innerText =
+            '[' + response.sentAt + '] '
+            + response.sender
+            + ': '
+            + response.content;
+
+        messages.appendChild(messageElement);
+    }
+</script>
+</body>
+</html>
