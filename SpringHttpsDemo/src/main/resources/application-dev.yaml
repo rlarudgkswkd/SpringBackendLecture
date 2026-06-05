@@ -1,0 +1,14 @@
+server:
+  port: 8443
+
+  ssl:
+    enabled: true
+    certificate: file:ssl/certs/localhost.crt
+    certificate-private-key: file:ssl/keys/localhost.key
+
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
+        same-site: strict
