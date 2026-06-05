@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Notification Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 760px;
+            margin: 40px auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0 12px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-right: 6px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        #notifications {
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            min-height: 200px;
+        }
+
+        .notification {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .connected {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>SSE Notification Demo</h1>
+
+<div>
+    <h2>1. SSE 연결</h2>
+
+    <label>사용자 ID</label>
+    <input id="userId" type="text" placeholder="예: user1">
+
+    <button onclick="connect()">SSE 연결</button>
+    <button onclick="disconnect()">연결 해제</button>
+
+    <div id="status">연결 상태: DISCONNECTED</div>
+</div>
+
+<hr>
+
+<div>
+    <h2>2. 알림 전송 테스트</h2>
+
+    <label>수신자 ID</label>
+    <input id="targetUserId" type="text" placeholder="예: user1">
+
+    <label>제목</label>
+    <input id="title" type="text" placeholder="예: 새 알림">
+
+    <label>내용</label>
+    <input id="content" type="text" placeholder="예: 새로운 메시지가 도착했습니다.">
+
+    <button onclick="sendNotification()">알림 전송</button>
+</div>
+
+<div id="notifications"></div>
+
+<script>
+    let eventSource = null;
+
+    function connect() {
+        const userId = document.getElementById('userId').value;
+
+        if (!userId) {
+            alert('사용자 ID를 입력해야 합니다.');
+            return;
+        }
+
+        if (eventSource !== null) {
+            eventSource.close();
+        }
+
+        eventSource = new EventSource('/notifications/stream/' + userId);
+
+        eventSource.addEventListener('connected', function (event) {
+            document.getElementById('status').innerText = '연결 상태: CONNECTED';
+            showConnectedMessage(event.data);
+        });
+
+        eventSource.addEventListener('notification', function (event) {
+            const notification = JSON.parse(event.data);
+            showNotification(notification);
+        });
+
+        eventSource.onerror = function () {
+            document.getElementById('status').innerText = '연결 상태: ERROR 또는 재연결 시도 중';
+        };
+    }
+
+    function disconnect() {
+        if (eventSource !== null) {
+            eventSource.close();
+            eventSource = null;
+            document.getElementById('status').innerText = '연결 상태: DISCONNECTED';
+        }
+    }
+
+    function sendNotification() {
+        const targetUserId = document.getElementById('targetUserId').value;
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+
+        if (!targetUserId || !title || !content) {
+            alert('수신자 ID, 제목, 내용을 모두 입력해야 합니다.');
+            return;
+        }
+
+        fetch('/notifications/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                targetUserId: targetUserId,
+                title: title,
+                content: content
+            })
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log('알림 전송 결과:', result);
+            });
+    }
+
+    function showConnectedMessage(message) {
+        const notifications = document.getElementById('notifications');
+
+        const element = document.createElement('div');
+        element.className = 'notification connected';
+        element.innerText = '[connected] ' + message;
+
+        notifications.appendChild(element);
+    }
+
+    function showNotification(notification) {
+        const notifications = document.getElementById('notifications');
+
+        const element = document.createElement('div');
+        element.className = 'notification';
+        element.innerText =
+            '[' + notification.sentAt + '] '
+            + notification.title
+            + ' - '
+            + notification.content;
+
+        notifications.appendChild(element);
+    }
+</script>
+</body>
+</html>
