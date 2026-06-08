@@ -1,0 +1,29 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: spring-nginx-https-nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/keys:/etc/nginx/keys:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  app:
+    build: .
+    container_name: spring-nginx-https-app
+    expose:
+      - "8080"
+    environment:
+      - SERVER_PORT=8080
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
